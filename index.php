@@ -1,16 +1,57 @@
+<?php
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    include 'database/connect.php';
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $sql = "SELECT * FROM tb_user WHERE username = '$username' 
+    AND password = '$password'";
+
+    $result = mysqli_query($conn, $sql);
+    if($result){
+        if(mysqli_num_rows($result) > 0){
+            $row = mysqli_fetch_assoc($result);
+            $role = $row['role'];
+            if($role == 'admin'){
+                session_start();
+                $_SESSION['username'] = $username;
+                echo "Login successful--admin";
+                //header('Location: admin.php');
+            }elseif ($role == 'staff'){
+                session_start();
+                $_SESSION['username'] = $username;
+                echo "Login successful--staff";
+                //header('Location: user.php');
+            }elseif ($role == 'student'){
+                session_start();
+                $_SESSION['username'] = $username;
+                echo "Login successful--student";
+                //header('Location: student.php');
+            }
+            else{
+                echo "Invalid role";
+            }
+        }else{
+            echo "Login failed";
+        }
+
+}
+}
+
+
+?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/Styles/style_index.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="Styles/style_index.css">
     
     <title>Hall Management System</title>
+
     <style>
-        /* Optional: Custom styles */
+       
         #loginModal {
             display: none;
         }
@@ -77,11 +118,11 @@
                     <h5 class="modal-title">Login</h5>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action= "s">
+                    <form method="post" action= "index.php">
                     <!-- Your login form goes here -->
-                    <input type="text" class="form-control" placeholder="Enter username">
+                    <input type="text" class="form-control" placeholder="Enter username" name="username">
                     <br>
-                    <input type="password" class="form-control" placeholder="Password">
+                    <input type="password" class="form-control" placeholder="Password" name= "password">
                     <br>
                     <button class="btn btn-primary">Login</button>
                     </form>
@@ -104,7 +145,7 @@
     <div>
         <h2 class="p-2 text-center">Ghartey Hall</h2>
         <h4 class="p-2 text-center">About</h4>
-        <p class="p-2">Ghartey hall is the biggest hall among all the halls across the three campuses of the University of Education, Winneba.
+        <p class="p-2 TXT">Ghartey hall is the biggest hall among all the halls across the three campuses of the University of Education, Winneba.
              The hall accommodates almost half the total number of residential students on the Winneba campus. 
              Block B and C accommodate both male and female students while Block A accommodates only male students. 
              Enjoy the charming green Ghartey gardens that add to the color and beautification of the hall and the south campus.
@@ -162,5 +203,4 @@
     </script>
 </body>
 </html>
-```
 
