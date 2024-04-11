@@ -1,4 +1,4 @@
-Hall Management System
+#Hall Management System#
 Overview
 The Hall Management System is a web-based application designed to streamline and automate various administrative tasks associated with managing residential halls or dormitories within an educational institution. It provides a centralized platform for administrators, staff, and residents to efficiently manage hall-related activities, such as room allocation, maintenance requests, communication, and record-keeping.
 
