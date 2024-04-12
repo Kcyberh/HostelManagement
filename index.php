@@ -45,9 +45,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+   
     <link rel="stylesheet" href="css/bootstrap.min.css"> 
     <link rel="stylesheet" href="Styles/style_index.css">
-    
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Hall Management System</title>
 
     <style>
@@ -116,13 +119,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Login</h5>
+                    
                 </div>
                 <div class="modal-body">
                     <form method="post" action= "index.php">
                     <!-- Your login form goes here -->
                     <input type="text" class="form-control" placeholder="Enter username" name="username">
                     <br>
-                    <input type="password" class="form-control" placeholder="Password" name= "password">
+                    <input type="password" class="form-control" placeholder="Password" name="password">
                     <br>
                     <button class="btn btn-primary">Login</button>
                     </form>
