@@ -190,14 +190,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <p>&copy; <?php echo date("Y"); ?> Ghartey Hall. All Rights Reserved.</p>
-                    <!-- You can add more dynamic content here, like links or information from your database -->
-                </div>
-            </div>
-        </div>
+        <?php 
+        include('footer.php')
+        ?>
     </footer>
 
     <script>

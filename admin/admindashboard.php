@@ -12,11 +12,12 @@
     </head>
     <body>
     <div id="main">
-       <h1>Dashboard</h1>
-       <div>
-       <?php
+    <?php
         include 'adminMenu.php';
         ?>
+       <h1>Dashboard</h1>
+       <div>
+      
        
     </body>
 </html>
