@@ -57,6 +57,12 @@
     transition: margin-left .5s;
     padding: 20px;
   }
+  .home{
+    position:absolute;
+    left: 90%;
+    font-size: larger;
+    font-weight: bolder;
+  }
   
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
   @media screen and (max-height: 450px) {
@@ -74,12 +80,12 @@
   <a href="admindashboard.php">Dashboard</a>
   <a href="#">Rooms</a>
   <a href="#"></a>
-  <a href="#">Users</a>
+  <a href="adminAddUser.php">Users</a>
 </div>
 
 <!-- Use any element to open the sidenav -->
+<div class="home"><span onclick="openNav()"><i class="fa-solid fa-bars">Menu</i></span></div>
 
-<span onclick="openNav()"><i class="fa-solid fa-bars">Home</i></span>
 <!-- Add all page content inside this div 
 if you want the side nav to push page content to 
 the right (not used if you only want the sidenav
