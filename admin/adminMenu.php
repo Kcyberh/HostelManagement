@@ -78,7 +78,7 @@
    
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="admindashboard.php">Dashboard</a>
-  <a href="#">Rooms</a>
+  <a href="adminAddRoom.php">Rooms</a>
   <a href="#"></a>
   <a href="adminAddUser.php">Users</a>
 </div>
