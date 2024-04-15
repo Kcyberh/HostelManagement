@@ -7,7 +7,7 @@ $DATABASE ='db_hallmanagement';
 
 $conn = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);
 
-/* if ($conn){
+ /* if ($conn){
      echo "Database connected successfully";
 }else{
     echo "Database connection failed";
