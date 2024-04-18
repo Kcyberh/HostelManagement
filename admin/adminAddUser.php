@@ -1,15 +1,60 @@
 <?php 
 $success = 0;
 $user = 0;
+$fillerror = 0;
+// define variables and set to empty values
+$fullname = $email = $password = $role = $index = "";
+$nameErr = $emailErr = $passwordErr = $roleErr = $indexErr = "";
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
+
+ 
    if($_SERVER['REQUEST_METHOD'] == 'POST'){
     include '../database/connect.php';
-    $index = $_POST['index'];
-    $name = $_POST['fullname'];
-    $password = $_POST['password'];
-    $role = $_POST['role'];
-    $email = $_POST['email'];
-     
+      if(empty($_POST['index'])){
+        $indexErr = "Index number is required";
+      } else{
+        $index = test_input($_POST['index']);
+        if(!preg_match("/^[0-9]*$/", $index)){
+          $indexErr = "Only numbers allowed";
+        }
+      }
+      
+   if (empty($_POST["name"])) {
+    $nameErr = "Name is required";}
+    else {
+      $name = test_input($_POST["name"]);
+      if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+        $nameErr = "Only letters and white space allowed";
+      }
+    }
+      $password = test_input($_POST["password"]);
+      
+        $password = password_hash($password, PASSWORD_DEFAULT);
+    
+   
+    
+    if(empty($_POST['role'])){
+  $roleErr = "Role is required";
+  }else{
+  $role = test_input($_POST['role']);
+  }
+  if(empty($_POST['email'])){
+  $emailErr = "Email is required";
+  }else{
+  $email = test_input($_POST['email']);
+  if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+    $emailErr = "Invalid email format";
+}
+}
 
+   
+    if(isset($index,$name,$password,$role,$email)){
+     
     $sql = "Select * from tb_user where index_number = '$index'";
     $result = mysqli_query($conn, $sql);
     if($result){
@@ -29,8 +74,13 @@ if(mysqli_query($conn, $sql)){
     }
    }
   }
+    }else{
+    $fillerror = 1;
+    }
+
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,18 +107,24 @@ if(mysqli_query($conn, $sql)){
         <h1>Add User</h1>
         <div class="container rounded bg-body-secondary">
     <h2 class="">Sign In</h2>
-    <form calss="row g-3" action="adminAddUser.php" method="post">
+    <form calss="row g-3"  method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
       <div class="col-md-6">
         <label for="index" class="form-label">Index Number</label>
-        <input type="text" class="form-control" id="index" placeholder="Enter index number" name="index">
+        <input type="text" class="form-control" id="index" placeholder="Enter index number" name="index" 
+        value="<?php echo $index;?>">
+        <span class= "error" >* <?php echo $indexErr;?> </span>
       </div>
       <div class="col-md-6">
         <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter name" name="fullname">
+        <input type="text" class="form-control" id="name" placeholder="Enter name" name="name"
+        >
+        <span class= "error" >* <?php echo $nameErr;?> </span>
       </div>
       <div class="col-6">
         <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+        <input type="password" class="form-control" id="password" placeholder="Password" name="password"
+       >
+        <span class= "error" >* <?php echo $passwordErr;?> </span>
       </div>
       <div class="col-md-3">
         <label for="role" class="form-label">Role</label>
@@ -78,10 +134,13 @@ if(mysqli_query($conn, $sql)){
           <option value="staff">Staff</option>
           <option value="student">Student</option>
         </select>
+        <span class= "error" >* <?php echo $roleErr;?> </span>
       </div>
       <div class="col-mb-6">
         <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"
+        value="<?php echo $email;?>">
+        <span class= "error" >* <?php echo $emailErr;?> </span>
       </div>
       <button type="submit" class="btn btn-primary btn-block m-2">Sign In</button>
     </form>
@@ -94,11 +153,12 @@ if(mysqli_query($conn, $sql)){
   ?>
   <?php 
   if($success){
-    echo "<div class='alert alert-sucess alert-dismissible fade show' role='alert'><strong>You have Successfully Signed Up<strong>
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>You have Successfully Signed Up<strong>
     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>";
   }
   ?>
+  
   </div>
 
     </div> 
