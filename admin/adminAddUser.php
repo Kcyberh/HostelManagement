@@ -104,20 +104,20 @@ if(mysqli_query($conn, $sql)){
     include('adminMenu.php')
     ?>
     
-        <h1>Add User</h1>
+        <h1 class="text-center">ADD USER</h1>
         <div class="container rounded bg-body-secondary">
     <h2 class="">Sign In</h2>
     <form calss="row g-3"  method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
       <div class="col-md-6">
         <label for="index" class="form-label">Index Number</label>
-        <input type="text" class="form-control" id="index" placeholder="Enter index number" name="index" 
+        <input type="text" class="form-control" id="index" placeholder="Enter index number" pattern="[0-9]+" title="Please enter numbers only" required name="index" 
         value="<?php echo $index;?>">
         <span class= "error" >* <?php echo $indexErr;?> </span>
       </div>
       <div class="col-md-6">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" id="name" placeholder="Enter name" name="name"
-        >
+        pattern="[a-zA-Z0-9]+" title="Please enter alphanumeric characters only" required>
         <span class= "error" >* <?php echo $nameErr;?> </span>
       </div>
       <div class="col-6">
@@ -160,6 +160,50 @@ if(mysqli_query($conn, $sql)){
   ?>
   
   </div>
+<table class="table caption-top table-responsive">
+  <caption>List of users</caption>
+  <thead class="table-dark">
+    <tr>
+      <th scope="col">Index Number</th>
+      <th scope="col">Name</th>
+      <th scope="col">Role</th>
+      <th scope="col">Email</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    include '../database/connect.php';
+    $sql = "SELECT * FROM `tb_user`";
+    $result = mysqli_query($conn, $sql);
+    if($result){
+      while($row=mysqli_fetch_assoc($result)){
+        $index_number = $row['index_number'];
+        $name = $row['name'];
+        $role = $row['role'];
+        $email = $row['email'];
+       
+        echo '
+        <tr> 
+      <th scope="row">'.$index_number.'</th>
+      <td>'.$name.'</td>
+      <td>'.$role.'</td>
+      <td>'.$email.'</td>
+      <td>
+      <button class="btn btn-primary m-1"><a href="" class="text-light">Update</a></button>
+      <button class="btn btn-danger m-1"><a href="delete.php?deleteindex='.$index_number.'" class="text-light">Delete</a></button>
+     </td>
+    </tr>
+        ';
+      }
+    }
+
+    
+    ?>
+   
+    
+  </tbody>
+</table>
 
     </div> 
    
