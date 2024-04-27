@@ -6,11 +6,10 @@ $DATABASE ='db_hallmanagement';
 
 
 $conn = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);
-
- /* if ($conn){
-     echo "Database connected successfully";
+/* if($conn){
+    echo 'Successful';
 }else{
-    echo "Database connection failed";
-    //die(mysqli_error($conn));
+
 } */
+
 ?>
