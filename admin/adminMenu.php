@@ -79,13 +79,15 @@
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="admindashboard.php">Dashboard</a>
   <a href="adminAddRoom.php">Rooms</a>
-  <a href="#"></a>
+  <a href="adminAddHall.php">Halls</a>
   <a href="adminAddUser.php">Users</a>
 </div>
 
 <!-- Use any element to open the sidenav -->
 <div class="home"><span onclick="openNav()"><i class="fa-solid fa-bars">Menu</i></span></div>
+<div>
 
+</div>
 <!-- Add all page content inside this div 
 if you want the side nav to push page content to 
 the right (not used if you only want the sidenav
