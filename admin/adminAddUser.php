@@ -106,7 +106,7 @@ if(mysqli_query($conn, $sql)){
     
         <h1 class="text-center">ADD USER</h1>
         <div class="container rounded bg-body-secondary">
-    <h2 class="">Sign In</h2>
+    <h2 class="text-center">Sign In</h2>
     <form calss="row g-3"  method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
       <div class="col-md-6">
         <label for="index" class="form-label">Index Number</label>
@@ -117,13 +117,13 @@ if(mysqli_query($conn, $sql)){
       <div class="col-md-6">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" id="name" placeholder="Enter name" name="name"
-        pattern="[a-zA-Z0-9]+" title="Please enter alphanumeric characters only" required>
+        pattern="[a-zA-Z\s]+" title="Please enter alphanumeric characters only" required>
         <span class= "error" >* <?php echo $nameErr;?> </span>
       </div>
       <div class="col-6">
         <label for="password" class="form-label">Password</label>
         <input type="password" class="form-control" id="password" placeholder="Password" name="password"
-       >
+       required>
         <span class= "error" >* <?php echo $passwordErr;?> </span>
       </div>
       <div class="col-md-3">
@@ -133,16 +133,17 @@ if(mysqli_query($conn, $sql)){
         <option value="admin">Admin</option>
           <option value="staff">Staff</option>
           <option value="student">Student</option>
+          
         </select>
         <span class= "error" >* <?php echo $roleErr;?> </span>
       </div>
       <div class="col-mb-6">
         <label for="email" class="form-label">Email address</label>
         <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"
-        value="<?php echo $email;?>">
+        value="<?php echo $email;?>" required>
         <span class= "error" >* <?php echo $emailErr;?> </span>
       </div>
-      <button type="submit" class="btn btn-primary btn-block m-2">Sign In</button>
+      <button type="submit" name="save" vlaue="Save" class="btn btn-primary btn-block m-2">Sign In</button>
     </form>
   <?php 
   if($user){
@@ -160,8 +161,34 @@ if(mysqli_query($conn, $sql)){
   ?>
   
   </div>
+  <?php
+include '../database/connect.php';
+
+if(isset($_POST['update'])){
+    $index_number = $_POST['index'];
+    $name = $_POST['name'];
+    $role = $_POST['role'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $sql = "UPDATE tb_user SET name='$name', role='$role', email='$email', password='$password' WHERE index_number='$index_number'";
+    $result = mysqli_query($conn, $sql);
+    if($result){
+        echo "Updated Successfully";
+        // header('location:adminUser.php');
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
+}
+
+$sql = "SELECT * FROM tb_user";
+$result = mysqli_query($conn, $sql);
+
+?>
+
+<!-- Table View  of Users -->
 <table class="table caption-top table-responsive">
-  <caption>List of users</caption>
+  <caption class="fs-1">USERS</caption>
   <thead class="table-dark">
     <tr>
       <th scope="col">Index Number</th>
@@ -173,37 +200,79 @@ if(mysqli_query($conn, $sql)){
   </thead>
   <tbody>
     <?php
-    include '../database/connect.php';
-    $sql = "SELECT * FROM `tb_user`";
-    $result = mysqli_query($conn, $sql);
-    if($result){
-      while($row=mysqli_fetch_assoc($result)){
-        $index_number = $row['index_number'];
-        $name = $row['name'];
-        $role = $row['role'];
-        $email = $row['email'];
-       
-        echo '
-        <tr> 
-      <th scope="row">'.$index_number.'</th>
-      <td>'.$name.'</td>
-      <td>'.$role.'</td>
-      <td>'.$email.'</td>
-      <td>
-      <button class="btn btn-primary m-1"><a href="" class="text-light">Update</a></button>
-      <button class="btn btn-danger m-1"><a href="delete.php?deleteindex='.$index_number.'" class="text-light">Delete</a></button>
-     </td>
-    </tr>
-        ';
-      }
-    }
-
-    
+    if($result && mysqli_num_rows($result) > 0){
+        while($row = mysqli_fetch_assoc($result)){
+            $index_number = $row['index_number'];
+            $name = $row['name'];
+            $role = $row['role'];
+            $email = $row['email'];
+            $password = $row['password'];
     ?>
-   
-    
+    <tr> 
+        <th scope="row"><?php echo $index_number;?></th>
+        <td><?php echo $name;?></td>
+        <td><?php echo $role;?></td>
+        <td><?php echo $email;?></td>
+        <td>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?php echo $index_number;?>">Update</button>
+            <button class="btn btn-primary m-1"><a href="" class="text-light">View</a></button>
+            <button class="btn btn-danger m-1"><a href="delete.php?deleteindex=<?php echo $index_number;?>" class="text-light">Delete</a></button>
+        </td>
+    </tr>
+
+    <!-- Modal For Update-->
+    <div class="modal fade" id="staticBackdrop<?php echo $index_number;?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Update User Info</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                        <div class="col-md-6">
+                            <label for="index" class="form-label">Index Number</label>
+                            <input type="text" class="form-control" id="index" placeholder="Enter index number" pattern="[0-9]+" title="Please enter numbers only" required name="index" value="<?php echo $index_number;?>" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" pattern="[a-zA-Z\s]+" title="Please enter alphabets only" required value="<?php echo $name;?>">
+                        </div>
+                        <div class="col-6">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Password" name="password" required value="<?php echo $password;?>">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-select" id="role" name="role">
+                                <option value="admin" <?php if($role == 'admin') echo 'selected';?>>Admin</option>
+                                <option value="staff" <?php if($role == 'staff') echo 'selected';?>>Staff</option>
+                                <option value="student" <?php if($role == 'student') echo 'selected';?>>Student</option>
+                            </select>
+                        </div>
+                        <div class="col-mb-6">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" value="<?php echo $email;?>" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary m-1" name="update" >Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+        }
+    }
+    ?>
   </tbody>
 </table>
+
+
+
+
 
     </div> 
    
