@@ -1,16 +1,19 @@
+<?php
+require '../session.php';
+?>
 <!DOCTYPE html>
 
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Admin Menu</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css"> 
-    <link rel="stylesheet" href="Styles/style_Menu.css">
-    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="">
+    <script src="../js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
  
 <style>
@@ -70,17 +73,26 @@
     .sidenav a {font-size: 18px;}
   }
 </style>
-       
+<script>
+        function confirmLogout() {
+            var result = confirm("Are you sure you want to logout?");
+            if (result) {
+                window.location.href = "../logout.php";
+            }
+        }
+    </script>
 </head>
     <body onload="openNav()">
   
     <div id="mySidenav" class="sidenav">
    
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <h5><?php echo $name; ?></h5>
   <a href="admindashboard.php">Dashboard</a>
   <a href="adminAddRoom.php">Rooms</a>
   <a href="adminAddHall.php">Halls</a>
   <a href="adminAddUser.php">Users</a>
+  <button onclick="confirmLogout()">Logout</button>
 </div>
 
 <!-- Use any element to open the sidenav -->
