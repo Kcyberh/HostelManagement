@@ -1,42 +1,48 @@
 <?php
-
+$notfound =0;
+$incorrect =0;
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     include 'database/connect.php';
     $username = $_POST['username'];
     $password = $_POST['password'];
+    
 
-    $sql = "SELECT * FROM tb_user WHERE username = '$username' 
-    AND password = '$password'";
-
+    $sql = "SELECT * FROM tb_user WHERE index_number = '$username'";
     $result = mysqli_query($conn, $sql);
+
     if($result){
         if(mysqli_num_rows($result) > 0){
             $row = mysqli_fetch_assoc($result);
-            $role = $row['role'];
-            if($role == 'admin'){
-                session_start();
-                $_SESSION['username'] = $username;
-                echo "Login successful--admin";
-                //header('Location: admin.php');
-            }elseif ($role == 'staff'){
-                session_start();
-                $_SESSION['username'] = $username;
-                echo "Login successful--staff";
-                //header('Location: user.php');
-            }elseif ($role == 'student'){
-                session_start();
-                $_SESSION['username'] = $username;
-                echo "Login successful--student";
-                //header('Location: student.php');
-            }
-            else{
-                echo "Invalid role";
-            }
-        }else{
-            echo "Login failed";
-        }
+            $hashed_password = $row['password'];
 
-}
+            if(password_verify($password, $hashed_password)){
+                $role = $row['role'];
+                session_start();
+                $_SESSION['username'] = $username;
+                
+                if($role == 'admin'){
+                    header('Location: admin/adminMenu.php');
+                    exit();
+                } elseif ($role == 'staff') {
+                    header('Location: staff/staffMenu.php');
+                    exit();
+                } elseif ($role == 'student') {
+                    header('Location: student/studentMenu.php');
+                    exit();
+                } else {
+                    echo "Invalid role";
+                }
+            } else {
+                $incorrect = 1;
+                //echo "Incorrect password";
+            }
+        } else {
+            $notfound = 1;
+            //echo "User not found";
+        }
+    } else {
+        echo "Database error";
+    }
 }
 
 
@@ -130,6 +136,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <br>
                     <button class="btn btn-primary">Login</button>
                     </form>
+                    <?php
+                    if($notfound){
+                        echo "<div class='alert alert-danger' role='alert'>
+                        A simple danger alert—check it out!
+                      </div>";
+                    }
+                    ?>
+                    <?php
+                    if($incorrect){
+                        echo "<div class='alert alert-danger' role='alert'>
+                        Incorrect Password
+                      </div>";
+                    }
+                    ?>
                 </div>
             </div>
         </div>
