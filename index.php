@@ -1,6 +1,7 @@
 <?php
-$notfound =0;
-$incorrect =0;
+//$notfound =0;
+//$incorrect =0;
+try{
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     include 'database/connect.php';
     $username = $_POST['username'];
@@ -33,18 +34,27 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     echo "Invalid role";
                 }
             } else {
-                $incorrect = 1;
+                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                Incorrect password
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
                 //echo "Incorrect password";
             }
         } else {
-            $notfound = 1;
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            User Not Found
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>';
             //echo "User not found";
         }
     } else {
         echo "Database error";
     }
 }
+}catch(Exception $e){
+    echo "Error: " . $e->getMessage();
 
+}
 
 ?>
 
@@ -135,21 +145,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <input type="password" class="form-control" placeholder="Password" name="password">
                     <br>
                     <button class="btn btn-primary">Login</button>
+                    
                     </form>
-                    <?php
-                    if($notfound){
-                        echo "<div class='alert alert-danger' role='alert'>
-                        A simple danger alert—check it out!
-                      </div>";
-                    }
-                    ?>
-                    <?php
-                    if($incorrect){
-                        echo "<div class='alert alert-danger' role='alert'>
-                        Incorrect Password
-                      </div>";
-                    }
-                    ?>
+                   
                 </div>
             </div>
         </div>
